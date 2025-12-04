@@ -19,7 +19,21 @@ const developerSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: 0
-  }
+  },
+  description:{
+    type: String,
+    default:'No description provided'
+  },
+  photo:{
+    type: String,
+    default:''
+  },
+  createdBy:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref:'User',
+    required:true
+  },
+
 }, {
   timestamps: true
 });
