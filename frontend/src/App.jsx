@@ -58,7 +58,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black transition-colors">
-      <Toaster
+      {/* <Toaster
         position="top-right"
         toastOptions={{
           duration: 3000,
@@ -66,6 +66,16 @@ function App() {
             background: 'var(--toast-bg)',
             color: 'var(--toast-color)',
           },
+        }}
+      /> */}
+        <Toaster
+        toastOptions={{
+          style: {
+            background: "white",
+            color: "black",
+          },
+          className:
+            "dark:bg-gray-900 dark:text-white dark:border dark:border-gray-700",
         }}
       />
 
