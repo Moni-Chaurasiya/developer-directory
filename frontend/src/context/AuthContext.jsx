@@ -1,7 +1,7 @@
 import {createContext,
         useContext,
         useState,
-       // useEffect
+        useEffect
        } from 'react';
 import toast from 'react-hot-toast';
 import {useNavigate} from 'react-router-dom'
@@ -20,17 +20,36 @@ export const useAuth=()=>{
 export const AuthProvider= ({children})=>{
 
 
-    const [user, setUser]= useState(()=>{
-        const storedUser=localStorage.getItem('user');
-        return storedUser ? JSON.parse(storedUser): null;
-    });
-    const [token, setToken]=useState(()=>localStorage.getItem('token'));
+    // const [user, setUser]= useState(()=>{
+    //     const storedUser=localStorage.getItem('user');
+    //     return storedUser ? JSON.parse(storedUser): null;
+    // });
+    // const [token, setToken]=useState(()=>localStorage.getItem('token'));
+
+
+    
+    const [user, setUser] = useState(null);
+    const [token, setToken] = useState(null);  
+    const [loading,setLoading]=useState(true);
     const navigate=useNavigate();
 
-//   const [user, setUser] = useState(null);
-//   const [token, setToken] = useState(null);
 
-//    const [loading,setLoading]=useState(true);
+ useEffect(() => {
+      const initAuth = () => {
+      const storedToken = localStorage.getItem("token");
+      const storedUser = localStorage.getItem("user");
+
+      if (storedToken && storedUser) {
+        setToken(storedToken);
+        setUser(JSON.parse(storedUser));
+      }
+
+      setLoading(false);
+    };
+
+    initAuth();
+  }, []);
+
 
     // useEffect(()=>{
     //     const storedToken=localStorage.getItem('token');
@@ -59,7 +78,7 @@ export const AuthProvider= ({children})=>{
     toast.success('Account created successfully!');
     navigate('/');
     }
-    
+
     const logout =()=>{
         setUser(null);
         setToken(null);
@@ -72,7 +91,7 @@ export const AuthProvider= ({children})=>{
     const value={
         user,
         token,
-       // loading,
+        loading,
         login,
         signup,
         logout,
