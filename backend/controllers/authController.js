@@ -8,7 +8,7 @@ const generateToken = (userId) => {
 exports.signup = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
-    const existingUser = await User.find({ email });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
         success: false,
@@ -42,14 +42,14 @@ exports.signup = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = User.find({ email });
+    const user =await User.findOne({ email });
     if (!user) {
       return res.status(401).json({
         success: false,
         message: "Invalid email or password",
       });
     }
-    const isPasswordValid = await user.comparePasssword(password);
+    const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
       return res.status(401).json({
         success: false,
@@ -84,7 +84,7 @@ exports.getMe= async(req,res,next)=>{
                 user:{
                     id:req.user._id,
                     name:req.user.name,
-                    email:req.use.email
+                    email:req.user.email
                 }
             }
         })

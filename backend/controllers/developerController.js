@@ -99,7 +99,7 @@ exports.getAllDevelopers = async (req, res, next) => {
 
   let sort= {createdAt:-1};
 
-  if(sortBy==='experiences-asc'){
+  if(sortBy==='experience-asc'){
     sort={experience:1}
   }else if(sortBy==='experience-desc'){
     sort= {experience :-1}
@@ -120,7 +120,7 @@ exports.getAllDevelopers = async (req, res, next) => {
         total,
         page:parseInt(page),
         pages:Math.ceil(total/limit),
-        hasMore:skip+ developers.length<total
+        hasMore:skip + developers.length<total
       }
     });
   } catch (error) {
