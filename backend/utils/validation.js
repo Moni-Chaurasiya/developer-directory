@@ -1,5 +1,4 @@
 const {body,validationResult} = require('express-validator');
-const { validate } = require('../models/Developer');
 
 const signupValidation=[
   body('name')
@@ -68,7 +67,7 @@ const developerValidation = [
 ];
 
 
-const valide=(req,res,next)=>{
+const validate=(req,res,next)=>{
     const errors=validationResult(req);
     if(!errors.isEmpty()){
         return res.status(400).json({
