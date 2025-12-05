@@ -1,9 +1,11 @@
-import { Moon, Sun, Search, X } from 'lucide-react';
+import { Moon, Sun, Search, X,LogOut,User } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 import { useState } from 'react';
 
 const Navbar = ({ searchQuery, setSearchQuery}) => {
   const { isDark, toggleTheme } = useTheme();
+  const {user,logout} =useAuth();
   const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   return (
@@ -44,7 +46,11 @@ const Navbar = ({ searchQuery, setSearchQuery}) => {
               )}
             </button>
 
-     
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
+              <User className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+              <span className="text-sm text-gray-700 dark:text-gray-300">{user?.name}</span>
+            </div>
+
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -55,6 +61,15 @@ const Navbar = ({ searchQuery, setSearchQuery}) => {
                 <Sun className="h-6 w-6 text-gray-600" />
               )}
             </button>
+
+            <button
+              onClick={logout}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              title="Logout"
+            >
+              <LogOut className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+            </button>
+
           </div>
         </div>
 

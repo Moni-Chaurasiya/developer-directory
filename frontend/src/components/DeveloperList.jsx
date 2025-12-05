@@ -1,8 +1,8 @@
 import DeveloperCard from './DeveloperCard';
 import { Users } from 'lucide-react';
 
-const DeveloperList = ({ developers, loading }) => {
-  if (loading) {
+const DeveloperList = ({ developers, loading ,onEdit,onDelete}) => {
+  if (loading && developers.length===0) {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
@@ -10,7 +10,7 @@ const DeveloperList = ({ developers, loading }) => {
     );
   }
 
-  if (developers.length === 0) {
+  if (developers.length === 0 && !loading) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <Users className="h-16 w-16 text-gray-400 dark:text-gray-600 mb-4" />
@@ -31,7 +31,7 @@ const DeveloperList = ({ developers, loading }) => {
       </h2>
       <div className="grid grid-cols-1 gap-4">
         {developers.map((developer) => (
-          <DeveloperCard key={developer._id} developer={developer} />
+          <DeveloperCard key={developer._id} developer={developer} onEdit={onEdit} onDelete={onDelete}/>
         ))}
       </div>
     </div>
