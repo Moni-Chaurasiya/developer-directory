@@ -200,6 +200,7 @@ const DeveloperForm = ({ onClose, onSuccess, editData = null }) => {
             </label>
             <input
               type="text"
+              name="techStack"
               {...register('techStack')}
               className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 dark:text-white"
               placeholder="e.g., React, Node, MongoDB"
@@ -215,6 +216,7 @@ const DeveloperForm = ({ onClose, onSuccess, editData = null }) => {
             </label>
             <input
               type="number"
+              name="experience"
               {...register('experience')}
               className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 dark:text-white"
               placeholder="e.g., 2"

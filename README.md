@@ -11,16 +11,16 @@ A modern, full-stack developer directory application with dark/light mode, searc
 ### Desktop View - Light Mode
 ![Desktop Light Mode](/frontend/public/LightMode.png)
 
-<!-- ### Mobile View
+### Mobile View
 <p align="center">
-  <img src="/frontend/src/assets/Login.png" width="45%" />
-  <img src="/frontend/src/assets/Mobile.png" width="45%" />
+  <img src="./frontend/src/assets/Login.png" width="45%" />
+  <img src="./frontend/src/assets/Mobile.png" width="45%" />
 </p>
 
 <p align="center">
-  <img src="/frontend/src/assets/MobileForm.png" width="45%" />
-  <img src="/frontend/src/assets/MobileProfile.png" width="45%" />
-</p> -->
+  <img src="./frontend/src/assets/MobileForm.png" width="45%" />
+  <img src="./frontend/src/assets/MobileProfile.png" width="45%" />
+</p>
 
 ## 🛠️ Tech Stack
 
@@ -63,7 +63,7 @@ npm install
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/devdirectory
 JWT_SECRET=my_super_secret_key_for_devdirectory
-FRONTEND_URL=https://developer-directory-kappa.vercel.app/
+FRONTEND_URL=https://developer-directory-kappa.vercel.app
 ```
 
 3. Start the server:
