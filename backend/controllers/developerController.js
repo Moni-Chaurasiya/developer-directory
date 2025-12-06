@@ -1,9 +1,11 @@
 const Developer = require('../models/Developer');
-
+const path = require('path');
+const fs = require('fs');
 exports.createDeveloper = async (req, res, next) => {
   try {
     const { fullName, role, techStack, experience, description } = req.body;
-    const photo= req.file ? req.file.path : '' ;
+    //const photo= req.file ? req.file.path : '' ;
+     const photo = req.file ? `/uploads/${req.file.filename}` : '';
     const developer = await Developer.create({
       fullName,
       role,
@@ -38,7 +40,14 @@ exports.updateDeveloper=async(req,res,next)=>{
     developer.description= description || developer.description;
 
     if(req.file){
-      developer.photo=req.file.path;
+     // developer.photo=req.file.path;
+     if (developer.photo) {
+        const oldPhotoPath = path.join(__dirname, '..', developer.photo);
+        if (fs.existsSync(oldPhotoPath)) {
+          fs.unlinkSync(oldPhotoPath);
+        }
+      }
+      developer.photo = `/uploads/${req.file.filename}`;
 
     }
     await developer.save();
@@ -61,6 +70,14 @@ exports.deleteDeveloper= async (req,res,next)=>{
         message: 'Developer not found'
       })
     }
+   
+    if (developer.photo) {
+      const photoPath = path.join(__dirname, '..', developer.photo);
+      if (fs.existsSync(photoPath)) {
+        fs.unlinkSync(photoPath);
+      }
+    }
+
     await developer.deleteOne();
     res.status(200).json({
       success:true,
@@ -99,7 +116,7 @@ exports.getAllDevelopers = async (req, res, next) => {
 
   let sort= {createdAt:-1};
 
-  if(sortBy==='experiences-asc'){
+  if(sortBy==='experience-asc'){
     sort={experience:1}
   }else if(sortBy==='experience-desc'){
     sort= {experience :-1}
@@ -120,7 +137,7 @@ exports.getAllDevelopers = async (req, res, next) => {
         total,
         page:parseInt(page),
         pages:Math.ceil(total/limit),
-        hasMore:skip+ developers.length<total
+        hasMore:skip + developers.length<total
       }
     });
   } catch (error) {

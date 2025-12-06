@@ -8,15 +8,15 @@ const {
   getAllDevelopers
 } = require('../controllers/developerController');
 
-const {developerValidation,validate}=require('../utils/validation');
 const auth=require('../middleware/auth')
 const {upload} = require('../config/cloudinary');
 
 router.use(auth)
 
 router.get('/',getAllDevelopers);
-router.get('./:id',getDeveloperById);
-router.post('/',upload.single('photo'),developerValidation, validate ,createDeveloper);
-router.put('/:id', upload.single('photo'), developerValidation, validate ,updateDeveloper)
+router.get('/:id',getDeveloperById);
+router.post('/',upload.single('photo'),createDeveloper);
+router.put('/:id', upload.single('photo'),updateDeveloper)
 router.delete('/:id', deleteDeveloper);
+
 module.exports = router;

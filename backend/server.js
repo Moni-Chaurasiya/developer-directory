@@ -5,6 +5,7 @@ const connectDB = require('./config/database');
 const authRoutes =require('./routes/auth')
 const developerRoutes = require('./routes/developers');
 const errorHandler = require('./middleware/errorHandler');
+const path = require('path');
 
 dotenv.config();
 
@@ -16,11 +17,15 @@ connectDB();
 app.use(cors({
 
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+ // origin:  'http://localhost:5173',
   Credentials: true
 }
 ));
 app.use(express.json());
-app.use(express.urlencoded({extented:true}));
+app.use(express.urlencoded({extented: true}));
+
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/auth',authRoutes)
 app.use('/api/developers', developerRoutes);

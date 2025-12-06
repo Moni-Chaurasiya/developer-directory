@@ -1,12 +1,40 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+   // baseURL: 'http://localhost:5000/api',
     headers: {  
     'Content-Type': 'application/json'
   }
 });
 
+
+
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const signup= async (data)=>{
   const response= await api.post('/auth/signup',data);
@@ -45,7 +73,7 @@ export const updateDeveloper=async (id,formData)=>{
   return response.data;
 }
 export const getDeveloperById= async (id) =>{
-  const response= await api.get(`/developer/${id}`);
+  const response= await api.get(`/developers/${id}`);
   return response.data;
 }
 export const deleteDeveloper= async (id)=>{
