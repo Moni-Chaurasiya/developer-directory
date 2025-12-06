@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { X, Upload,Image as ImageIcon } from 'lucide-react';
+import { X, Upload, Image as ImageIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { createDeveloper,updateDeveloper } from '../services/api';
-import {useState, useEffect} from 'react';
+import { createDeveloper, updateDeveloper } from '../services/api';
+import { useState, useEffect } from 'react';
 
 const schema = z.object({
   fullName: z.string().min(2, 'Name must be at least 2 characters'),
@@ -15,15 +15,14 @@ const schema = z.object({
   experience: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
     message: 'Experience must be a positive number'
   }),
-  description:z.string().optional()
+  description: z.string().optional()
 });
 
-const DeveloperForm = ({ onClose, onSuccess, editData=null}) => {
-  
-  const [photoPreview,setPhotoPreview]= useState(null);
-  const [photoFile,setPhotoFile]=useState(null);
+const DeveloperForm = ({ onClose, onSuccess, editData = null }) => {
+  const [photoPreview, setPhotoPreview] = useState(null);
+  const [photoFile, setPhotoFile] = useState(null);
   const isEditMode = !!editData;
-  
+
   const {
     register,
     handleSubmit,
@@ -31,7 +30,7 @@ const DeveloperForm = ({ onClose, onSuccess, editData=null}) => {
     reset
   } = useForm({
     resolver: zodResolver(schema),
-    defaultValues:editData? {
+    defaultValues: editData ? {
       fullName: editData.fullName,
       role: editData.role,
       techStack: editData.techStack,
@@ -41,36 +40,50 @@ const DeveloperForm = ({ onClose, onSuccess, editData=null}) => {
   });
 
 
-  useEffect(()=>{
-    if(editData?.photo){
+  useEffect(() => {
+    if (editData?.photo) {
       setPhotoPreview(editData.photo);
     }
-  },[editData])
+  }, [editData]);
 
-const handlePhotoChange=(e)=>{
-  const file= e.target.files[0];
-  if(file){
-    if(file.size>5*1024*1024){
-      toast.error('Image size must be less than 5MB')
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('Image size must be less than 5MB');
+        return;
+      }
+
+  
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please select an image file');
+        return;
+      }
+
+      setPhotoFile(file);
+      
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
-    if(!file.type.startsWith('image/')){
-      toast.error('Please select an image file');
-      return
-    }
-    setPhotoFile(file)
-  }
-}
+  };
 
   const onSubmit = async (data) => {
     try {
+    
       const formData = new FormData();
       formData.append('fullName', data.fullName);
-      formData.append('role',data.role);
+      formData.append('role', data.role);
       formData.append('techStack', data.techStack);
-      formData.append('experience',data.description || 'No description provided')
+      formData.append('experience', data.experience);
+      formData.append('description', data.description || 'No description provided');
 
-      if(photoFile){
-        formData.append('photo',photoFile)
+    
+      if (photoFile) {
+        formData.append('photo', photoFile);
       }
 
       if (isEditMode) {
@@ -87,16 +100,16 @@ const handlePhotoChange=(e)=>{
       onSuccess();
       onClose();
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to add developer');
+      toast.error(error.response?.data?.message || 'Failed to save developer');
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white dark:bg-gray-900 rounded-lg w-full max-w-md border border-gray-200 dark:border-gray-800">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div className="bg-white dark:bg-gray-900 rounded-lg w-full max-w-2xl border border-gray-200 dark:border-gray-800 my-8">
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            {isEditMode ? 'Edit Developer': 'Add Developer'}
+            {isEditMode ? 'Edit Developer' : 'Add Developer'}
           </h2>
           <button
             onClick={onClose}
@@ -107,8 +120,8 @@ const handlePhotoChange=(e)=>{
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
-
-         <div>
+          
+          <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Profile Photo (Optional)
             </label>
@@ -133,6 +146,7 @@ const handlePhotoChange=(e)=>{
                 </div>
                 <input
                   type="file"
+                  name="photo"
                   accept="image/*"
                   onChange={handlePhotoChange}
                   className="hidden"
@@ -144,37 +158,40 @@ const handlePhotoChange=(e)=>{
             </p>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Full Name
-            </label>
-            <input
-              type="text"
-              {...register('fullName')}
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 dark:text-white"
-              placeholder="Enter full name"
-            />
-            {errors.fullName && (
-              <p className="mt-1 text-sm text-red-500">{errors.fullName.message}</p>
-            )}
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Full Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                {...register('fullName')}
+                className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 dark:text-white"
+                placeholder="Enter full name"
+              />
+              {errors.fullName && (
+                <p className="mt-1 text-sm text-red-500">{errors.fullName.message}</p>
+              )}
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Role
-            </label>
-            <select
-              {...register('role')}
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 dark:text-white"
-            >
-              <option value="">Select role</option>
-              <option value="Frontend">Frontend</option>
-              <option value="Backend">Backend</option>
-              <option value="Full-Stack">Full-Stack</option>
-            </select>
-            {errors.role && (
-              <p className="mt-1 text-sm text-red-500">{errors.role.message}</p>
-            )}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Role
+              </label>
+              <select
+                {...register('role')}
+                className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 dark:text-white"
+              >
+                <option value="">Select role</option>
+                <option value="Frontend">Frontend</option>
+                <option value="Backend">Backend</option>
+                <option value="Full-Stack">Full-Stack</option>
+              </select>
+              {errors.role && (
+                <p className="mt-1 text-sm text-red-500">{errors.role.message}</p>
+              )}
+            </div>
           </div>
 
           <div>
@@ -229,13 +246,10 @@ const handlePhotoChange=(e)=>{
             className="w-full py-3 px-4 bg-orange-600 hover:bg-orange-700 disabled:bg-orange-400 text-white font-medium rounded-lg transition-colors"
           >
             {isSubmitting ? (
-               isEditMode? 'Updating...': 'Adding...'
+              isEditMode ? 'Updating...' : 'Adding...'
             ) : (
-              isEditMode? 'Update Developer': 'Add Developer'
-            ) 
-
-          }
-            
+              isEditMode ? 'Update Developer' : 'Add Developer'
+            )}
           </button>
         </form>
       </div>
