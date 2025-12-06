@@ -3,6 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, Briefcase, Code, User } from 'lucide-react';
 import { getDeveloperById } from '../services/api';
 import toast from 'react-hot-toast';
+import { getImageUrl } from '../utils/helpers';
+// const getImageUrl = (photoPath) => {
+//   if (!photoPath) return null;
+//   if (photoPath.startsWith('http')) return photoPath;
+//   return `http://localhost:5000${photoPath}`;
+// };
 
 const DeveloperProfile = () => {
   const { id } = useParams();
@@ -85,7 +91,8 @@ const DeveloperProfile = () => {
         
               {developer.photo ? (
                 <img
-                  src={developer.photo}
+                  //src={developer.photo}
+                  src={getImageUrl(developer.photo)}
                   alt={developer.fullName}
                   className="w-32 h-32 rounded-full border-4 border-white dark:border-gray-900 object-cover"
                 />

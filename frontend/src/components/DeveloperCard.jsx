@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Edit2, Trash2, Eye } from 'lucide-react';
-
+import { getImageUrl } from '../utils/helpers';
 const DeveloperCard = ({ developer, onEdit, onDelete }) => {
   const navigate = useNavigate();
   const { _id, fullName, role, techStack, experience, photo } = developer;
@@ -18,17 +18,28 @@ const DeveloperCard = ({ developer, onEdit, onDelete }) => {
     return colors[role] || 'bg-orange-600';
   };
 
+  // const getImageUrl = (photoPath) => {
+  //   if (!photoPath) return null;
+  //   if (photoPath.startsWith('http')) return photoPath;
+  //   return `http://localhost:5000${photoPath}`;
+  // };
+
   const techArray = techStack.split(',').map(tech => tech.trim());
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-shadow">
       <div className="flex items-start gap-4">
-        {/* Profile Picture or Initial */}
+       
         {photo ? (
           <img
-            src={photo}
+            //src={photo}
+            src={getImageUrl(photo)}
             alt={fullName}
             className="w-16 h-16 rounded-full object-cover flex-shrink-0"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.nextSibling.style.display = 'flex';
+            }}
           />
         ) : (
           <div className="w-16 h-16 rounded-full bg-orange-600 flex items-center justify-center flex-shrink-0">
@@ -44,7 +55,6 @@ const DeveloperCard = ({ developer, onEdit, onDelete }) => {
               {fullName}
             </h3>
             
-            {/* Action Buttons */}
             <div className="flex items-center gap-2">
               <button
                 onClick={() => navigate(`/developer/${_id}`)}

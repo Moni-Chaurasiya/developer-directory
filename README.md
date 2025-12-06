@@ -6,12 +6,21 @@ A modern, full-stack developer directory application with dark/light mode, searc
 
 ### Desktop View - Dark Mode
 ![Desktop Dark Mode](/frontend/public/DarkMode.png)
-
+![Desktop Dark Mode](/frontend/public/DeveloperForm.png)
+![Desktop Dark Mode](/frontend/public/DeveloperProfile.png)
 ### Desktop View - Light Mode
 ![Desktop Light Mode](/frontend/public/LightMode.png)
 
-### Mobile View
-![Mobile View](/frontend/public/Mobile.png)
+<!-- ### Mobile View
+<p align="center">
+  <img src="/frontend/src/assets/Login.png" width="45%" />
+  <img src="/frontend/src/assets/Mobile.png" width="45%" />
+</p>
+
+<p align="center">
+  <img src="/frontend/src/assets/MobileForm.png" width="45%" />
+  <img src="/frontend/src/assets/MobileProfile.png" width="45%" />
+</p> -->
 
 ## 🛠️ Tech Stack
 
@@ -53,6 +62,8 @@ npm install
 ```env
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/devdirectory
+JWT_SECRET=my_super_secret_key_for_devdirectory
+FRONTEND_URL=https://developer-directory-kappa.vercel.app/
 ```
 
 3. Start the server:
@@ -73,6 +84,8 @@ npm install
 2. Create `.env` file in `frontend/` folder:
 ```env
 VITE_API_URL=http://localhost:5000/api
+OR
+VITE_API_URL=https://developer-directory-6idf.onrender.com/api
 ```
 
 3. Start the development server:
@@ -86,7 +99,7 @@ Frontend runs on: `http://localhost:5173`
 
 ### Backend Deployment URL
 ```
-https://developer-directory-6idf.onrender.com
+https://developer-directory-6idf.onrender.com/
 ```
 
 
@@ -101,33 +114,11 @@ https://developer-directory-kappa.vercel.app/
 ✅ Add developers with form validation  
 ✅ Search by name  
 ✅ Filter by role (Frontend/Backend/Full-Stack)  
-✅ Filter by tech stack  
+✅ Filter by tech stack or experience  
 ✅ Dark/Light mode toggle  
 ✅ Fully responsive design  
 ✅ Toast notifications  
 ✅ Modern UI with Tailwind CSS  
-
-## 🔌 API Endpoints
-
-### GET `/api/developers`
-Get all developers (with optional filters)
-
-**Query Parameters:**
-- `role` - Filter by role
-- `techStack` - Filter by technology
-
-### POST `/api/developers`
-Create a new developer
-
-**Request Body:**
-```json
-{
-  "fullName": "Moni Chaurasiya",
-  "role": "Full-Stack",
-  "techStack": "React, Node, MongoDB",
-  "experience": 3
-}
-```
 
 
 **Made with ❤️ using React vite + Node.js + MongoDB**
